@@ -23,8 +23,8 @@ cd $_
 [[ -f "${LOG_DIR}/.mariadb" ]] || {
   echo "INFO - install MariaDB"
   aptitude --quiet --assume-yes install mariadb-server mysql-client
-  source ${BASEDIR}/setup/mysql_secure_installation_template.sql > ${BASEDIR}/mysql_secure_installation.sql
-  source ${BASEDIR}/setup/mlflow_setup_template.sql > ${BASEDIR}/mlflow_setup.sql
+  source ${BASEDIR}/mysql_secure_installation_template.sql > ${BASEDIR}/mysql_secure_installation.sql
+  source ${BASEDIR}/mlflow_setup_template.sql > ${BASEDIR}/mlflow_setup.sql
   echo mysql_secure_installation.sql
   cat mysql_secure_installation.sql
   echo mlflow_setup.sql
