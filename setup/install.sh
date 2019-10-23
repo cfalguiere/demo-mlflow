@@ -19,8 +19,8 @@ aptitude --quiet --assume-yes install unzip
 [[ -f "${LOG_DIR}/.mariadb" ]] || {
   echo "INFO - install MariaDB"
   aptitude --quiet --assume-yes install mariadb-server mysql-client
-  source setup/mysql_secure_installation_template.sql > mysql_secure_installation.sql
-  source setup/mlflow_setup_template.sql > mlflow_setup.sql
+  source ${BASEDIR}/setup/mysql_secure_installation_template.sql > mysql_secure_installation.sql
+  source ${BASEDIR}/setup/mlflow_setup_template.sql > mlflow_setup.sql
   echo mysql_secure_installation.sql
   cat mysql_secure_installation.sql
   echo mlflow_setup.sql
