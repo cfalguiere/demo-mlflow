@@ -8,6 +8,7 @@ trap "{ echo 'ERROR - install failed' ; exit 255; }" SIGINT SIGTERM ERR
 # prereq
 
 LOG_DIR=/var/log/mlflow/setup
+mkdir -p ${LOG_DIR}
 mkdir -p /opt
 cd $_
 
