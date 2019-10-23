@@ -26,11 +26,11 @@ cd $_
   source ${BASEDIR}/mysql_secure_installation_template.sql > ${BASEDIR}/mysql_secure_installation.sql
   source ${BASEDIR}/mlflow_setup_template.sql > ${BASEDIR}/mlflow_setup.sql
   echo mysql_secure_installation.sql
-  cat mysql_secure_installation.sql
+  cat ${BASEDIR}/mysql_secure_installation.sql
   echo mlflow_setup.sql
-  cat mlflow_setup.sql
-  mysql -sfu root < "mlflow_setup.sql"
-  mysql -sfu root < "mysql_secure_installation.sql"
+  cat ${BASEDIR}/mlflow_setup.sql
+  mysql -sfu root < "${BASEDIR}/mlflow_setup.sql"
+  mysql -sfu root < "${BASEDIR}/mysql_secure_installation.sql"
   touch "${LOG_DIR}/.mariadb"
 }
 
