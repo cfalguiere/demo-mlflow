@@ -27,6 +27,7 @@ aptitude --quiet --assume-yes install unzip
   cat mlflow_setup.sql
   mysql -sfu root < "mlflow_setup.sql"
   mysql -sfu root < "mysql_secure_installation.sql"
+  touch "${LOG_DIR}/.mariadb"
 }
 
 # anaconda
@@ -38,6 +39,7 @@ aptitude --quiet --assume-yes install unzip
   bash ./miniconda.sh -b -p /opt/miniconda
   /opt/miniconda/bin/conda update -y conda
   rm /opt/miniconda.sh
+  touch "${LOG_DIR}/.anaconda"
 }
 
 #ajout pip et letsencrypt
@@ -57,6 +59,8 @@ echo "INFO - install MLFlow"
 
   # pre requisite for some mlflow operations
   aptitude --quiet --assume-yes install snapd
+
+  touch "${LOG_DIR}/.mlflow"
 }
 
 chown -R ubuntu:ubuntu /opt
