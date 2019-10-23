@@ -1,0 +1,3 @@
+CREATE USER 'mlflow'@'localhost' IDENTIFIED BY '${MLFLOW_DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON *.* TO 'mlflow'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE mlflow;

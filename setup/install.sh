@@ -11,10 +11,22 @@ LOG_DIR=/var/log/mlflow/setup
 mkdir -p /opt
 cd $_
 
+aptitude --quiet --assume-yes install make build-essential
+aptitude --quiet --assume-yes install tree
+aptitude --quiet --assume-yes install unzip
+
 # MySQL
 [[ -f "${LOG_DIR}/.mariadb" ]] || {
   echo "INFO - install MariaDB"
-  apt install mariadb-server
+  aptitude --quiet --assume-yes install mariadb-server mysql-client
+  source setup/mysql_secure_installation_template.sql > mysql_secure_installation.sql
+  source setup/mlflow_setup_template.sql > mlflow_setup.sql
+  echo mysql_secure_installation.sql
+  cat mysql_secure_installation.sql
+  echo mlflow_setup.sql
+  cat mlflow_setup.sql
+  mysql -sfu root < "mlflow_setup.sql"
+  mysql -sfu root < "mysql_secure_installation.sql"
 }
 
 # anaconda
@@ -28,6 +40,11 @@ cd $_
   rm /opt/miniconda.sh
 }
 
+#ajout pip et letsencrypt
+#apt-get install --assume-yes python-pip
+#pip install letsencrypt && sudo pip install letsencrypt-s3front
+
+
 # mlflow
 echo "INFO - install MLFlow"
 [[ -f "${LOG_DIR}/.mlflow" ]] || {
@@ -39,7 +56,7 @@ echo "INFO - install MLFlow"
   git clone --depth 1 https://github.com/mlflow/mlflow /opt/mlflow/mlflowquickstart
 
   # pre requisite for some mlflow operations
-  apt install snapd
+  aptitude --quiet --assume-yes install snapd
 }
 
 chown -R ubuntu:ubuntu /opt
