@@ -29,8 +29,8 @@ cd $_
   cat ${BASEDIR}/mysql_secure_installation.sql
   echo mlflow_setup.sql
   cat ${BASEDIR}/mlflow_setup.sql
-  mysql -sfu root --host 127.0.0.1 < "${BASEDIR}/mysql_secure_installation.sql"
-  mysql -sfu root --host 127.0.0.1 -p ${MLFLOW_DB_PASSWORD} < "${BASEDIR}/mlflow_setup.sql"
+  mysql -sf --host 127.0.0.1 < "${BASEDIR}/mysql_secure_installation.sql"
+  mysql -sf --host 127.0.0.1 -p ${MLFLOW_DB_PASSWORD} < "${BASEDIR}/mlflow_setup.sql"
   touch "${LOG_DIR}/.mariadb"
 }
 
