@@ -44,7 +44,9 @@ cd $_
   bash ./miniconda.sh -b -p /opt/miniconda
   /opt/miniconda/bin/conda update -y conda
   rm /opt/miniconda.sh
-  echo 'PATH="${PATH}:/opt/miniconda/bin/"' >> /etc/profile.d/conda.sh
+  ln -s /opt/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+  #echo 'PATH="${PATH}:/opt/miniconda/bin/"' > /etc/profile.d/conda.sh
+  #echo 'conda init bash' >> /etc/profile.d/conda.sh
   touch "${LOG_DIR}/.anaconda"
 }
 
@@ -66,8 +68,11 @@ echo "INFO - install MLFlow"
   # pre requisite for some mlflow operations
   aptitude --quiet --assume-yes install snapd
 
-  cp ${BASEDIR}/start-mlflow-server-*.sh /opt/mlflow/
+  cp ${BASEDIR}/../start-mlflow-server-*.sh /opt/mlflow/
   chmod u+x /opt/mlflow/start*.sh
+  cp ${BASEDIR}/../setenv.sh /opt/mlflow/
+
+# TODO setenv pour mot de passe
 
   touch "${LOG_DIR}/.mlflow"
 }
