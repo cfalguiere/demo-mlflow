@@ -6,6 +6,7 @@ set -eu
 trap "{ echo 'ERROR - install failed' ; exit 255; }" SIGINT SIGTERM ERR
 
 # prereq
+# requires var MLFLOW_DB_PASSWORD
 
 LOG_DIR=/var/log/mlflow/setup
 mkdir -p ${LOG_DIR}
@@ -25,12 +26,12 @@ cd $_
   aptitude --quiet --assume-yes install mariadb-server mysql-client
   source ${BASEDIR}/mysql_secure_installation_template.sql > ${BASEDIR}/mysql_secure_installation.sql
   source ${BASEDIR}/mlflow_setup_template.sql > ${BASEDIR}/mlflow_setup.sql
-  echo mysql_secure_installation.sql
+  echo "INFO - mysql_secure_installation.sql content"
   cat ${BASEDIR}/mysql_secure_installation.sql
-  echo mlflow_setup.sql
+  echo "INFO - mlflow_setup.sql content"
   cat ${BASEDIR}/mlflow_setup.sql
-  mysql -sf --host 127.0.0.1 < "${BASEDIR}/mysql_secure_installation.sql"
-  mysql -sf --host 127.0.0.1 -p ${MLFLOW_DB_PASSWORD} < "${BASEDIR}/mlflow_setup.sql"
+  mysql -sf  < "${BASEDIR}/mysql_secure_installation.sql"
+  mysql -sf  < "${BASEDIR}/mlflow_setup.sql"
   touch "${LOG_DIR}/.mariadb"
 }
 
