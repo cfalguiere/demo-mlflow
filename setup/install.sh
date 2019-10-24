@@ -44,6 +44,8 @@ cd $_
   bash ./miniconda.sh -b -p /opt/miniconda
   /opt/miniconda/bin/conda update -y conda
   rm /opt/miniconda.sh
+  echo 'PATH="${PATH}":/opt/miniconda/bin/' >> /etc/environment
+  source /etc/environment
   touch "${LOG_DIR}/.anaconda"
 }
 
@@ -64,6 +66,9 @@ echo "INFO - install MLFlow"
 
   # pre requisite for some mlflow operations
   aptitude --quiet --assume-yes install snapd
+
+  cp ${BASEDIR}/start-mlflow-server-*.sh /opt/mlflow/
+  chmod u+x /opt/mlflow/start*.sh
 
   touch "${LOG_DIR}/.mlflow"
 }
