@@ -44,8 +44,7 @@ cd $_
   bash ./miniconda.sh -b -p /opt/miniconda
   /opt/miniconda/bin/conda update -y conda
   rm /opt/miniconda.sh
-  echo 'PATH="${PATH}":/opt/miniconda/bin/' >> /etc/environment
-  source /etc/environment
+  echo 'PATH="${PATH}:/opt/miniconda/bin/"' >> /etc/profile.d/conda.sh
   touch "${LOG_DIR}/.anaconda"
 }
 
