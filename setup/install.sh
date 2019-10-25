@@ -8,7 +8,7 @@ trap "{ echo 'ERROR - install failed' ; exit 255; }" SIGINT SIGTERM ERR
 # prereq
 # requires var MLFLOW_DB_PASSWORD
 
-LOG_DIR=/var/log/mlflow/setup
+LOG_DIR=/var/log/demo-mlflow/setup
 mkdir -p ${LOG_DIR}
 mkdir -p /opt
 cd $_
@@ -33,6 +33,10 @@ cd $_
   cat ${BASEDIR}/mlflow_setup.sql
   mysql -sfu root < "${BASEDIR}/mysql_secure_installation.sql"
   mysql -sfu root < "${BASEDIR}/mlflow_setup.sql"
+
+  # mysql server port
+  ufw allow 3306
+
   touch "${LOG_DIR}/.mysql"
 }
 
@@ -64,14 +68,8 @@ echo "INFO - install MLFlow"
 
   mkdir -p /opt/mlflow/
 
-  git clone --depth 1 https://github.com/mlflow/mlflow /opt/mlflow/mlflowquickstart
-
-  # pre requisite for some mlflow operations
-  aptitude --quiet --assume-yes install snapd
-
   cp ${BASEDIR}/scripts/start-mlflow-server-*.sh /opt/mlflow/
   chmod u+x /opt/mlflow/start*.sh
-  cp ${BASEDIR}/scripts/setenv.sh /opt/mlflow/
 
 # TODO setenv pour mot de passe
 # config MySQL
@@ -80,10 +78,32 @@ echo "INFO - install MLFlow"
 #usermod -aG sudo $account
 #groupadd tools
 
+  # MLFlow UI port
+  ufw allow 5000
+
   touch "${LOG_DIR}/.mlflow"
+}
+
+# mlflow
+echo "INFO - install MLFlow"
+[[ -f "${LOG_DIR}/.jupyter" ]] || {
+  /opt/miniconda/bin/conda create -c conda-forge --name demo python=3 mlflow anaconda
+
+  mkdir -p /opt/demo/
+  git clone --depth 1 https://github.com/mlflow/mlflow /opt/demo/mlflowquickstart
+  cp ${BASEDIR}/scripts/start-jupyter.sh /opt/demo/
+  chmod u+x /opt/mlflow/start*.sh
+  cp ${BASEDIR}/scripts/setenv.sh /opt/demo/
+
+  # pre requisite for some mlflow operations
+  aptitude --quiet --assume-yes install snapd
+  # Jupyter UI port
+  ufw allow 8888
+  touch "${LOG_DIR}/.jupyter"
 }
 
 chown -R ubuntu:ubuntu /opt
 chown -R ubuntu:ubuntu /var/log/mlflow
+chown -R ubuntu:ubuntu /opt/mlflow # future use
 
 echo "INFO - install Completed"
