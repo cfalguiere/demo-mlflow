@@ -103,7 +103,7 @@ echo "INFO - install MLFlow"
 }
 
 chown -R ubuntu:ubuntu /opt
-chown -R ubuntu:ubuntu /var/log/mlflow
+chown -R ubuntu:ubuntu /var/log/demo-mlflow
 chown -R ubuntu:ubuntu /opt/mlflow # future use
 
 echo "INFO - install Completed"
