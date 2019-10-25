@@ -73,6 +73,7 @@ echo "INFO - install MLFlow"
   cp ${BASEDIR}/../setenv.sh /opt/mlflow/
 
 # TODO setenv pour mot de passe
+# config MySQL
 
   touch "${LOG_DIR}/.mlflow"
 }
