@@ -21,9 +21,10 @@ cd $_
 }
 
 # MySQL
-[[ -f "${LOG_DIR}/.mariadb" ]] || {
+[[ -f "${LOG_DIR}/.mysql" ]] || {
   echo "INFO - install MariaDB"
-  aptitude --quiet --assume-yes install mariadb-server mysql-client
+  #aptitude --quiet --assume-yes install mariadb-server mysql-client
+  aptitude --quiet --assume-yes install mysql-server mysql-client
   source ${BASEDIR}/mysql_secure_installation_template.sql > ${BASEDIR}/mysql_secure_installation.sql
   source ${BASEDIR}/mlflow_setup_template.sql > ${BASEDIR}/mlflow_setup.sql
   echo "INFO - mysql_secure_installation.sql content"
@@ -32,7 +33,7 @@ cd $_
   cat ${BASEDIR}/mlflow_setup.sql
   mysql -sf  < "${BASEDIR}/mysql_secure_installation.sql"
   mysql -sf  < "${BASEDIR}/mlflow_setup.sql"
-  touch "${LOG_DIR}/.mariadb"
+  touch "${LOG_DIR}/.mysql"
 }
 
 # anaconda
@@ -74,6 +75,10 @@ echo "INFO - install MLFlow"
 
 # TODO setenv pour mot de passe
 # config MySQL
+#useradd --home "$path_home"  --shell /bin/bash $account
+#usermod -aG tools $account
+#usermod -aG sudo $account
+#groupadd tools
 
   touch "${LOG_DIR}/.mlflow"
 }
