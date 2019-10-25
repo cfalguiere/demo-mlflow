@@ -31,8 +31,8 @@ cd $_
   cat ${BASEDIR}/mysql_secure_installation.sql
   echo "INFO - mlflow_setup.sql content"
   cat ${BASEDIR}/mlflow_setup.sql
-  mysql -sf  < "${BASEDIR}/mysql_secure_installation.sql"
-  mysql -sf  < "${BASEDIR}/mlflow_setup.sql"
+  mysql -sfu root < "${BASEDIR}/mysql_secure_installation.sql"
+  mysql -sfu root < "${BASEDIR}/mlflow_setup.sql"
   touch "${LOG_DIR}/.mysql"
 }
 
