@@ -92,7 +92,7 @@ echo "INFO - install MLFlow"
   mkdir -p /opt/demo/
   git clone --depth 1 https://github.com/mlflow/mlflow /opt/demo/mlflowquickstart
   cp ${BASEDIR}/scripts/start-jupyter.sh /opt/demo/
-  chmod u+x /opt/mlflow/start*.sh
+  chmod u+x /opt/demo/start*.sh
   cp ${BASEDIR}/scripts/setenv.sh /opt/demo/
 
   # pre requisite for some mlflow operations
