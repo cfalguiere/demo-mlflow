@@ -68,9 +68,9 @@ echo "INFO - install MLFlow"
   # pre requisite for some mlflow operations
   aptitude --quiet --assume-yes install snapd
 
-  cp ${BASEDIR}/../start-mlflow-server-*.sh /opt/mlflow/
+  cp ${BASEDIR}/scripts/start-mlflow-server-*.sh /opt/mlflow/
   chmod u+x /opt/mlflow/start*.sh
-  cp ${BASEDIR}/../setenv.sh /opt/mlflow/
+  cp ${BASEDIR}/scripts/setenv.sh /opt/mlflow/
 
 # TODO setenv pour mot de passe
 # config MySQL
