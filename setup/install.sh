@@ -1,3 +1,4 @@
+#!/bin/bash
 BASEDIR=$(readlink -f $0 | xargs dirname)
 
 echo "INFO - starting install-tools $( date )"
