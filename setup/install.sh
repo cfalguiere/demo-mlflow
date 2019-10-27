@@ -93,9 +93,9 @@ echo "INFO - install Jupyter"
   mkdir -p /opt/demo/
   git clone --depth 1 https://github.com/mlflow/mlflow /opt/demo/mlflowquickstart
   cp ${BASEDIR}/scripts/start-jupyter.sh /opt/demo/
-  chmod u+x /opt/demo/start*.sh
   cp ${BASEDIR}/scripts/setenv.sh /opt/demo/
   cp ${BASEDIR}/scripts/list-urls.sh /opt/demo/
+  chmod u+x /opt/demo/*.sh
 
   # pre requisite for some mlflow operations
   aptitude --quiet --assume-yes install snapd
