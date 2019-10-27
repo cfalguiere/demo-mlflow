@@ -86,7 +86,7 @@ echo "INFO - install MLFlow"
 }
 
 # mlflow
-echo "INFO - install MLFlow"
+echo "INFO - install Jupyter"
 [[ -f "${LOG_DIR}/.jupyter" ]] || {
   /opt/miniconda/bin/conda create -c conda-forge --name demo python=3 mlflow anaconda
 
@@ -95,6 +95,7 @@ echo "INFO - install MLFlow"
   cp ${BASEDIR}/scripts/start-jupyter.sh /opt/demo/
   chmod u+x /opt/demo/start*.sh
   cp ${BASEDIR}/scripts/setenv.sh /opt/demo/
+  cp ${BASEDIR}/scripts/list-urls.sh /opt/demo/
 
   # pre requisite for some mlflow operations
   aptitude --quiet --assume-yes install snapd
