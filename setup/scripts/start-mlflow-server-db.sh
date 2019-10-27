@@ -1,3 +1,4 @@
+#!/bin/bash
 # TODO check var
 # mysql db mlflow and user mlflow must have been created
 # var MLFLOW_DB_PASSWORD must have been set to the password of te mlflow account
