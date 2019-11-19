@@ -1,0 +1,14 @@
+# sklearn_elasticnet_wine/MLproject
+
+name: demo
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      alpha: float
+      l1_ratio: {type: float, default: 0.1}
+    command: "python train.py {alpha} {l1_ratio}"
+  auto_train:
+    command: "python auto_train.py"

@@ -1,0 +1,13 @@
+Coefs:
+	 fixed acidity: -0.0
+	 volatile acidity: -0.0
+	 citric acid: 0.0
+	 residual sugar: 0.0
+	 chlorides: -0.0
+	 free sulfur dioxide: 0.00926259992729461
+	 total sulfur dioxide: -0.0035730049340992635
+	 density: -0.0
+	 pH: 0.0
+	 sulphates: 0.0
+	 alcohol: 0.17711635050225652
+	 intercept: [4.18049952]
