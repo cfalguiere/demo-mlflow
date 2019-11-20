@@ -15,6 +15,9 @@ import numpy as np
 import mlflow
 import mlflow.sklearn
 
+import matplotlib.pyplot as plt
+
+
 def data_prep(datafile):
 
     # read data from file
@@ -55,7 +58,41 @@ def eval_metrics(actual, predicted):
     return rmse, mae, r2
 
 
+def output_enet_coefs(tempdir, columns, lr):
+    coef_file_name = os.path.join(tempdir, "coefs.txt")
+    with open(coef_file_name, "w") as f: 
+        f.write("Coefs:\n")         
+        [ f.write("\t %s: %s\n" % (name, coef)) for (name, coef) in zip(columns, lr.coef_) ]
+        f.write("\t intercept: %s\n" % lr.intercept_) 
 
+        
+def plot_enet_feature_importance(tempdir, columns, coefs):
+    # Reference the global image variable
+    global image
+    
+    # Display results
+    fig = plt.figure(1)
+    ax = plt.gca()
+    
+    feature_importance = pd.Series(index = columns, data = np.abs(coefs))
+    n_selected_features = (feature_importance>0).sum()
+    print('{0:d} features, reduction of {1:2.2f}%'.format(
+        n_selected_features,(1-n_selected_features/len(feature_importance))*100))
+    feature_importance.sort_values().tail(30).plot(kind = 'bar', figsize = (20,12));
+    
+    # Display images
+    image = fig
+    
+    # Save figure
+    fig.savefig(os.path.join(tempdir, "feature-importance.png"))
+
+    # Close plot
+    plt.close(fig)
+
+    # Return images
+    return image    
+   
+    
 def train_elasticnet(datasets, in_alpha, in_l1_ratio, trial=None):
     from sklearn.linear_model import ElasticNet
     
@@ -99,21 +136,22 @@ def train_elasticnet(datasets, in_alpha, in_l1_ratio, trial=None):
         # store info       
         workdir = tempfile.mkdtemp()
         with tempfile.TemporaryDirectory() as tmpdirname:  
-            coef_file_name = os.path.join(tmpdirname, "coefs.txt")
-            with open(coef_file_name, "w") as f: 
-                f.write("Coefs:\n")         
-                print("\nCoefs:")
-                [ f.write("\t %s: %s\n" % (name, coef)) for (name, coef) in zip(train_x.columns, lr.coef_) ]
-                [ print("\t %s: %s" % (name, coef)) for (name, coef) in zip(train_x.columns, lr.coef_) ]
-                f.write("\t intercept: %s\n" % lr.intercept_) 
-                print("\t intercept: %s" % lr.intercept_) 
-            mlflow.log_artifacts(tmpdirname, artifact_path="artifacts") 
+            output_enet_coefs(tmpdirname, train_x.columns, lr) 
+
+            # plots
+            plot_enet_feature_importance(tmpdirname, train_x.columns, lr.coef_)
+            # Call plot_enet_descent_path
+            #image = plot_enet_descent_path(tmpdirname, train_x, train_y, l1_ratio)
+
+            # Log artifacts (output files)
+            mlflow.log_artifacts(tmpdirname, artifact_path="artifacts")
 
         # store model
         mlflow.sklearn.log_model(lr, "model")
         
         return rmse
 
+    
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARN)
     logger = logging.getLogger(__name__)
