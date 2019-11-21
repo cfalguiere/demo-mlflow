@@ -4,6 +4,7 @@
 import logging
 import warnings
 from datetime import datetime
+import sys
 
 import numpy as np
 
@@ -23,7 +24,9 @@ if __name__ == "__main__":
     np.random.seed(40)
     optuna.logging.set_verbosity(optuna.logging.INFO)
     ts = datetime.now().strftime('%Y%m%dT%H%M%S')
-    
+
+    n_iter = int(sys.argv[1]) if len(sys.argv) > 1 else 100
+
     try:
         datasets = data_prep("../wine-quality.csv")
     except Exception as e:
@@ -43,7 +46,7 @@ if __name__ == "__main__":
         
 
     study = optuna.create_study()  # Create a new study.
-    study.optimize(objective, n_trials=100)  # Invoke optimization of the objective function.
+    study.optimize(objective, n_trials=n_iter, n_jobs=-1)  # Invoke optimization of the objective function.
 
 
     study.best_params
