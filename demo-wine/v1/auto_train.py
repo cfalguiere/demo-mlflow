@@ -39,14 +39,15 @@ if __name__ == "__main__":
 
         suggested_alpha = trial.suggest_uniform('alpha', 0.1, 0.8)
         suggested_l1_ratio = trial.suggest_uniform('l1_ratio', 0.1, 0.8)
+        print("trial: %s" % trial.number)
 
-        error = train_elasticnet(datasets, suggested_alpha, suggested_l1_ratio, trial="%s_%s" % (ts,trial.trial_id))
+        error = train_elasticnet(datasets, suggested_alpha, suggested_l1_ratio, trial="%s_%s" % (ts,trial.number), verbose=False)
 
         return error  # A objective value linked with the Trial object.
         
 
     study = optuna.create_study()  # Create a new study.
-    study.optimize(objective, n_trials=n_iter, n_jobs=-1)  # Invoke optimization of the objective function.
+    study.optimize(objective, n_trials=n_iter, n_jobs=1)  # Invoke optimization of the objective function.
 
 
     study.best_params
@@ -66,5 +67,7 @@ if __name__ == "__main__":
 
     mlflow_client = MlflowClient()
     mlflow_client.set_tag(best_model_id, "best_model", "true")
+
+    train_elasticnet(datasets, study.best_params['alpha'],study.best_params['l1_ratio'], trial="best_model")
 
 

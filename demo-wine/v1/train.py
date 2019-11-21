@@ -65,6 +65,11 @@ def output_enet_coefs(tempdir, columns, lr):
         [ f.write("\t %s: %s\n" % (name, coef)) for (name, coef) in zip(columns, lr.coef_) ]
         f.write("\t intercept: %s\n" % lr.intercept_) 
 
+def output_train_data_summary(tempdir, train_x, train_y):
+    fs_file_name = os.path.join(tempdir, "train_features_summary.txt")
+    train_x.describe().to_csv(fs_file_name) 
+    ft_file_name = os.path.join(tempdir, "train_target_summary.txt")
+    train_y.describe().to_csv(ft_file_name) 
         
 def plot_enet_feature_importance(tempdir, columns, coefs):
     # Reference the global image variable
@@ -93,7 +98,7 @@ def plot_enet_feature_importance(tempdir, columns, coefs):
     return image    
    
     
-def train_elasticnet(datasets, in_alpha, in_l1_ratio, trial=None):
+def train_elasticnet(datasets, in_alpha, in_l1_ratio, trial=None, verbose=True):
     from sklearn.linear_model import ElasticNet
     
     train_x = datasets['train_x']
@@ -133,18 +138,19 @@ def train_elasticnet(datasets, in_alpha, in_l1_ratio, trial=None):
              mlflow.set_tag("trial", trial)
            
         # store info
-        # store info       
-        workdir = tempfile.mkdtemp()
-        with tempfile.TemporaryDirectory() as tmpdirname:  
-            output_enet_coefs(tmpdirname, train_x.columns, lr) 
+        if verbose:     
+            workdir = tempfile.mkdtemp()
+            with tempfile.TemporaryDirectory() as tmpdirname:  
+                output_train_data_summary(tmpdirname, train_x, train_y) 
+                output_enet_coefs(tmpdirname, train_x.columns, lr) 
 
-            # plots
-            plot_enet_feature_importance(tmpdirname, train_x.columns, lr.coef_)
-            # Call plot_enet_descent_path
-            #image = plot_enet_descent_path(tmpdirname, train_x, train_y, l1_ratio)
+                # plots
+                plot_enet_feature_importance(tmpdirname, train_x.columns, lr.coef_)
+                # Call plot_enet_descent_path
+                #image = plot_enet_descent_path(tmpdirname, train_x, train_y, l1_ratio)
 
-            # Log artifacts (output files)
-            mlflow.log_artifacts(tmpdirname, artifact_path="artifacts")
+                # Log artifacts (output files)
+                mlflow.log_artifacts(tmpdirname, artifact_path="artifacts")
 
         # store model
         mlflow.sklearn.log_model(lr, "model")
