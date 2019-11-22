@@ -1,7 +1,7 @@
-# demo-mlflow
+# Demo MLflow
 
 
-## setup de l'instance EC2
+## Setup de l'instance EC2
 
 ID de l'AMI :ami-0ad37dbbe571ce2a1  (Ubuntu v18.04)
 
@@ -9,7 +9,7 @@ Type d'instance : t2.micro (General-Purpose - 1 vCPU - 1 Go de RAM)
 
 Volume EBS de 16 Go (attention à l'espace occupé par les deux environnements anaconda)
 
-## Le script d'install en User Data
+### le script d'install en User Data
 ```
 #!/bin/bash
 echo "INFO - starting init $( date )"
@@ -49,7 +49,7 @@ export MLFLOW_DB_PASSWORD=xxxxxxxx
 
 ```
 
-## ports à ouvrir dans le security group 
+### ports à ouvrir dans le security group 
 ``` 
 port 5000 (MLFlow server)
 port 8888 (Jupyter)
@@ -57,7 +57,7 @@ port 3306 (MySQL) local pour outils d'admin
 port 8080 ou autre pour l'API Serve
 ```
 
-##  le script installe
+###  le script installe
 - installe anaconda et mysql
 - crée 2 conda env un pour le server mlflow l'autre pour le datascientist
 - crée un dossier /opt/mlflow qui est home d'installatiton de mlflow
@@ -65,31 +65,31 @@ port 8080 ou autre pour l'API Serve
 - crée un dossier /opt/demo pour les fichiers de la démo. Les soures de base se trouvent dans ce projet (sous dossier demo-wine) et sont copiés dans le dossier /opt/demo par l'install
 - download le quickstart mlflow
 
-
-## le modèle utilisé
-c'est un Elstinet sur les données Wine dérivé du quickstart MLflow
-
-Le modèle n'est pas optimé et ne vaut pas grand chose. c'est juste un exemple.
-
-
-## URLs
+### URLs
 
 MLflow server : http://<IP>:5000/
 
 MLflow Jupyter : http://<IP>:8888/
 
 
-## commandes 
+### variables d'environnement 
 
 De manière systématique : 
 ```
+export MLFLOW_DB_PASSWORD=xxxxxxxx # en principe fait par l'install et sert à lancer le serveur en mode db
 export MLFLOW_TRACKING_URI=http://localhost:5000
 ```
 
-## Filaire de la démo
+
+# Filaire de la démo
+
+## Le modèle utilisé
+c'est un Elstinet sur les données Wine dérivé du quickstart MLflow
+
+Le modèle n'est pas optimisé et ne vaut pas grand chose. C'est juste un exemple.
 
 
-### Démarrer un jupyter
+## Démarrer un jupyter
 ```
 Ouvrir une session SSH
 cd /opt/demo
@@ -100,7 +100,7 @@ Aller sur http://<ip-ec2>:8888
 
 Copier le token affiché dans le shell (Logout / login si besoin) 
 
-### Comprendre le modèle
+## Comprendre le modèle
 - Dans Jupyer, aller dans demo-wine
 - Ouvrir explore data pour visulaiser les données
 - Ouvrir build model pour voir le modèle initial
@@ -114,7 +114,7 @@ Métriques :
 - Mean Absolute Error (MAE) : écart moyen entre la prédiction et la valeur réelle. Doit être le plus bas possible.
 - r2 score : proportion de la variance de la variable à expliquer prédictible par les variables explicatives. Varie de 0 à 100% (meilleur)
 
-### Démarrer mlflow server
+## Démarrer mlflow server
 ```
 Ouvrir une session
 cd /opt/demo
@@ -122,11 +122,14 @@ conda activate mlflow
 ./start-mlflow-server-basic.sh
 ```
 
-./start-mlflow-server-db.sh pour la version DB
+ou  pour la version DB
+```
+./start-mlflow-server-db.sh
+```
 
 Aller sur http://<ip-ec2>:5000
 
-### Modèle avec MLflow
+### modèle avec MLflow
 - Dans Jupyter, aller dans demo-wine-mlflow
 - le nom de l'expérimentation est dans une des premières cellules. Il peut être changé, l'expérimentation sera crée automatiquement
 - noter le with mlflow.run et les appels de log_param, log_metric et log_model
@@ -135,7 +138,7 @@ Aller sur http://<ip-ec2>:5000
 
 La fin du notebook, crée des données en masse en utilisant un auto tuning par Optuna
 
-### possibilité de l'IHM du server
+### possibilités de l'IHM du server
 - comparer des runs: les sélectionner et utiliser Compare 
 - faire un graphe de MAE en fonction de alpha (ou toute métrique en fonction de tout param)
 - faire une recherche par valeur de param, de métrique ou par tag : par exemple dans la cellule taper metrics.rmse < 0.8 (le modèle est peu pertinent mais tourne en général en 0.77 et 0.85)
@@ -154,7 +157,7 @@ Les éléments sont dans v1
 - train.py  : entry point principal - entraine le modèle en passant les paramètres alpha et l1_ratio (qui a une valeur par défaut)
 - auto_train.py : entry point pour l'auto train
 
-## Partage d'un modèle
+## partage d'un modèle
 
 Disons que j'ai partagé ces 4 fichiers par Github. Un autre DataScientist fait un pull et obtient sa version du projet/
 
@@ -170,7 +173,7 @@ mlflow run v1 -P alpha=0.42 --experiment-id 9
 
 Il crée un env anaconda à partir du conda.yaml la première fois, mais garde l'information. Par la suite l'environnement sera simplement mis à jour.
 
-## Lancer un autre entry-point, par exemple pour l'auto tuning
+### lancer un autre entry-point, par exemple pour l'auto tuning
 
 le programme auto_tuning utilise optuna pour chercher les meilleurs paramètres. dans cette phase il appele la fonction d'entrainement avec verbose=False. Quand il a fini il recalcule le modèle à partir des meilleurs paramètres et cette fois en verbose pour avoir tous les éléments de décision. La data prep n'et jouée qu'une fois avant l'entrée dans Optuna.
 
@@ -205,7 +208,7 @@ curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"c
 ```
 
 Notez que le code ne contient pas de programme predict. il est intégré dans serve et utilise le modèle stocké sous une forme "standardisée" par MLflow.
-## Troubleshooting
+# Troubleshooting
 
 Vérifier MySql
 
