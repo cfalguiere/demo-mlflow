@@ -157,7 +157,7 @@ Les éléments sont dans v1
 - train.py  : entry point principal - entraine le modèle en passant les paramètres alpha et l1_ratio (qui a une valeur par défaut)
 - auto_train.py : entry point pour l'auto train
 
-## partage d'un modèle
+## Partage d'un modèle
 
 Disons que j'ai partagé ces 4 fichiers par Github. Un autre DataScientist fait un pull et obtient sa version du projet/
 
