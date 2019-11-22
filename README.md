@@ -65,7 +65,6 @@ port 8080 ou autre pour l'API Serve
 - crée un dossier /opt/demo pour les fichiers de la démo. Les soures de base se trouvent dans ce projet (sous dossier demo-wine) et sont copiés dans le dossier /opt/demo par l'install
 - download le quickstart mlflow
 
-```
 
 ## le modèle utilisé
 c'est un Elstinet sur les données Wine dérivé du quickstart MLflow
