@@ -5,7 +5,7 @@
 
 ID de l'AMI :ami-0ad37dbbe571ce2a1  (Ubuntu v18.04)
 
-Type d'instance : t2.micro (General-Purpose - 1 vCPU - 1 Go de RAM)
+Type d'instance : t2.medium (General-Purpose - 2 vCPU - 4 Go de RAM)
 
 Volume EBS de 16 Go (attention à l'espace occupé par les deux environnements anaconda)
 
